@@ -1,0 +1,62 @@
+body { 
+    background-color: rgb(17, 19, 20) !important; 
+    color: white;
+    padding: 0px;
+    margin: 0px;
+    font-family: 'Nunito', sans-serif;
+    font-size: 16px;
+}
+
+.Form{
+    width: 100%;
+    align-items: center;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+}
+
+input, textarea{
+    font-family: monospace;
+    display: block;
+    color: white;
+    border: 1px solid #777;
+    border-radius: 5px;
+    background: rgb(23, 25, 26);
+    padding: 15px;
+    outline: none;
+    width: 70%;
+    margin-bottom: 20px;
+    transition: 0.3s;
+    -webkit-transition: 0.3s;
+    -moz-transition: 0.3s;
+}
+button{
+    font-family: monospace;
+}
+
+textarea{
+    resize: none;
+    height: 50px;
+}
+
+.upload{
+    
+    font-size: 3vh;
+    background: rgb(3, 46, 140);
+    color: #fff;
+    border: 1px solid rgb(3, 46, 140);
+    border-radius: 5px;
+    padding: 15px;
+    display: block;
+    transition: 0.3s;
+    -webkit-transition: 0.3s;
+    -moz-transition: 0.3s;
+    width: 50%;
+}
+
+.upload:hover{
+    background: none;
+    color: #5d8ffc;
+    border: 1px solid rgb(3, 46, 140);
+    cursor: pointer;
+}
