@@ -1,150 +1,77 @@
-import { initializeApp } from "https://www.gstatic.com/firebasejs/9.4.0/firebase-app.js";
-import { getFirestore,deleteDoc,  collection, doc, setDoc} from "https://www.gstatic.com/firebasejs/9.4.0/firebase-firestore.js";
-var config = {
-	apiKey: "AIzaSyCdzbcpM_Oe3NQgBmpJcJJq1cs0z5VFWYc",
-  	authDomain: "fir-web-login-906b6.firebaseapp.com",
-  	projectId: "fir-web-login-906b6",
-  	storageBucket: "fir-web-login-906b6.appspot.com",
-  	messagingSenderId: "1014146452701",
-  	appId: "1:1014146452701:web:39150ab67e871555db1f34",
-  	measurementId: "G-X24EJNJLQV"
-};
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css?family=Nunito:400,600,700" rel="stylesheet">
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.5.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.5.0/firebase-storage.js"></script>
 
-const app = initializeApp(config)
-const db = getFirestore(app)
-const grp = collection(db, "collection")
-const usrs = collection(db, "users");
 
-function any(list){
-    const n = list.length;
-    for(var i = 0; i < n; i++){
-        if(list[i].length == 0){
-            return true;
-        }
-    }
-    return false;
-}
-async function uploadnew(object){
-    try{
-        //const docRef = await addDoc(collection(db, "collection"), object)
-        //const str = Math.random().toString(36).substring(2, 7);
-        await setDoc(doc(grp), object)
-        swal(
-            "Video Uploaded Successfully", 
-            "Your video was successfully uploaded, \n you can now access it on the main website!", 
-            "success"
-        )
-    }
-    catch{
-        swal(
-            "Video Submission Failure", 
-            "Your video was not uploaded to the website, try again.", 
-            "error"
-        )
-    }
-}
+    <title>TLE Eliminators - Manage Server</title>
+    <link rel = "icon" href = "logo.jpg" type = "image/x-icon">
+    <link rel="stylesheet" href="form.css" />
+    <script src="form.js" type="module"></script>
+</head>
+<body>
 
-async function addNewUser(){
+    <div class="Form">
 
-    const Email = document.getElementById("email").value;
-    if(Email.length === 0){
-        swal("Account Verification Failed", "Please enter an email address to verify the account.", "error");
-        return;
-    }
+        <h1>Upload New Video</h1>
 
-    const OBJ = {
-        email:Email
-    }
+        <br><br><br>
+        <input type="text" placeholder="* Class Name..." id="vidname" required/>
+        <input type="text" placeholder="* Video Link... (mp4 only)" required id="vidlink"/>
+        <input type="text" placeholder="* Slides Link..." required id = "slides"/>
 
-    try{
-        await setDoc(doc(usrs, Email), OBJ);
-        swal("Account Verified", `${Email} is now a verified account.`, "success");
-    }
-    catch{
-        swal("Account Verification Failed", "The account was not verified, please try again.", "error");
-    }
-}
+        <textarea placeholder="* Video Description..." required id="vidis"></textarea>
 
-async function deleteUser(){
-    const Email = document.getElementById("email_del").value;
-    if(Email.length === 0){
-        swal("Account Deletion Failed", "Please enter and email address to delete account.", "error");
-        return;
-    }
-    try{
-        await deleteDoc(doc(usrs, Email));
-        swal("Account Successfully Deleted", `${Email} was successfully deleted.`, "success");
-    }
-    catch{
-        swal("Account Deletion Failed", "The account was not deleted, please try again.", "error");
-    }
-}
+        <button class="upload" onclick="upload()">Upload</button>
+    </div>
 
-function upload(){
-    const vidname = document.getElementById("vidname").value;
-    const vidlink = document.getElementById("vidlink").value;
-    const vidis = document.getElementById("vidis").value;
-    const slides = document.getElementById("slides").value;
+    <br><br><hr><br><br>
+    <div class="Form">
 
-    if(any([vidname, vidlink, vidis, slides])){
-        swal(
-            "Video Submission Failed", 
-            "Please fill the whole form,\n (*) means that the input field is required to fill. \n (Uploading Video Poster is optional)",
-            "error"
-        )
-    }
-    else{
+        <h1>Verify Account</h1>
 
-        const object = {
-            "name":vidname,
-            "link":vidlink,
-            "description":vidis,
-            "slides":slides,
-        }
+        <br><br><br>
+        <input type="email" placeholder="* Email Address..." id = "email" required/>
+        <button class="upload" onclick="addNewUser()">Verify Account</button>
+    </div>
+    
+    <br><br><hr><br><br>
 
-        console.log(object)
-        //getCities(db)
-        uploadnew(object)
-    }
-}
+    <div class="Form">
 
-document.addEventListener('contextmenu', event => event.preventDefault());
+        <h1>Delete Account</h1>
 
-async function uploadTask(){
-    const opt = document.getElementById("select").value;
-    const task = document.getElementById("task").value;
+        <br><br><br>
+        <input type="email" placeholder="* Email Address..." id = "email_del" required/>
+        <button class="upload" onclick="deleteUser()">Delete Account</button>
+    </div>
 
-    if((opt === "batch") || (task.length === 0)){
-        swal("Task Submission Failure", "The task was not successfully uploaded to database, \n make sure you fill the whole form.", "error");
-        return;
-    }
+    <br><br><hr><br><br>
 
-    const calendar = new Date()
-    var string = "";
-    string += calendar.getDate() + "/" + calendar.getMonth() + '/' + calendar.getFullYear();
-    console.log(string)
+    <div class="Form">
 
-    const OBJ = {
-        "task":task,
-        "date":string
-    }
+        <h1>Upload Daily Tasks</h1>
 
-    try{
-        await setDoc(
-            doc((opt === "tle1") ? collection(db, "dailytasks") : collection(db, "dailytasks1")),
-            OBJ
-        )
-        swal("Task Submitted Successfully", "Daily task was successfully uploaded to database.", "success")
-    }
+        <br><br><br>
+        <input type="text" placeholder="* Task Link..." id = "task" required/>
+        <input type="date" required id = "daydate"/>
+        <select class="Select" id = "select">
+            <option value="batch" id = "batch">Choose Batch</option>
+            <option value = "tle1" id = "tle1">TLE Eliminators LVL - 1</option>
+            <option value = "tle2" id = "tle2">TLE Eliminators LVL - 2</option>
+        </select>
+        <button class="upload" onclick="uploadTask()">Upload Task</button>
+    </div>
 
-    catch{
-        swal("Task Submission Failure", "Daily task was not successfully uploaded to database, \n please try again.", "error");
-    }
+    <br><br><br><br>
 
-}
 
-window.upload = upload
-window.uploadnew = uploadnew
-window.addNewUser = addNewUser
-window.deleteUser = deleteUser
-window.uploadTask = uploadTask
+</body>
+</html>
+
