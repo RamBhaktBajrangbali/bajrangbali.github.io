@@ -28,7 +28,7 @@ async function uploadnew(object){
     try{
         //const docRef = await addDoc(collection(db, "collection"), object)
         //const str = Math.random().toString(36).substring(2, 7);
-        await setDoc(doc(grp, object.name), object)
+        await setDoc(doc(grp), object)
         swal(
             "Video Uploaded Successfully", 
             "Your video was successfully uploaded, \n you can now access it on the main website!", 
@@ -110,8 +110,41 @@ function upload(){
 
 document.addEventListener('contextmenu', event => event.preventDefault());
 
+async function uploadTask(){
+    const opt = document.getElementById("select").value;
+    const task = document.getElementById("task").value;
+
+    if((opt === "batch") || (task.length === 0)){
+        swal("Task Submission Failure", "The task was not successfully uploaded to database, \n make sure you fill the whole form.", "error");
+        return;
+    }
+
+    const calendar = new Date()
+    var string = "";
+    string += calendar.getDate() + "/" + calendar.getMonth() + '/' + calendar.getFullYear();
+    console.log(string)
+
+    const OBJ = {
+        "task":task,
+        "date":string
+    }
+
+    try{
+        await setDoc(
+            doc((opt === "tle1") ? collection(db, "dailytasks") : collection(db, "dailytasks1")),
+            OBJ
+        )
+        swal("Task Submitted Successfully", "Daily task was successfully uploaded to database.", "success")
+    }
+
+    catch{
+        swal("Task Submission Failure", "Daily task was not successfully uploaded to database, \n please try again.", "error");
+    }
+
+}
 
 window.upload = upload
 window.uploadnew = uploadnew
 window.addNewUser = addNewUser
 window.deleteUser = deleteUser
+window.uploadTask = uploadTask
